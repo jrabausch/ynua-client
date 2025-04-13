@@ -5,7 +5,7 @@ import { combineHeaders } from './helpers';
 export class Client {
   protected readonly urlBase: URL;
   protected readonly headers: Headers;
-  protected readonly fetch: typeof fetch;
+  protected readonly fetch: (request: Request) => Promise<Response>;
 
   constructor(config: ClientConfig) {
     const basePath = config.basePath ? config.basePath.replace(/\/+$/, '') : '';
@@ -14,10 +14,10 @@ export class Client {
     const url = `${protocol}://${config.host}${port}`;
     this.urlBase = new URL(`${basePath}/`, url);
     this.headers = new Headers(config.headers);
-    this.fetch = config.fetch ?? fetch;
+    this.fetch = config.fetch ?? globalThis.fetch.bind(globalThis);
     // auth
     if (config.auth) {
-      this.headers.set('Authorization', this.getAuthValue(config.auth));
+      this.headers.set('Authorization', this.getAuthHeader(config.auth));
     }
   }
 
@@ -25,7 +25,7 @@ export class Client {
     return this.urlBase.toString();
   }
 
-  protected getAuthValue(authConfig: AuthConfig): string {
+  protected getAuthHeader(authConfig: AuthConfig): string {
     const type = authConfig.type;
     if (type === 'basic') {
       const credentials = btoa(`${authConfig.username}:${authConfig.password}`);

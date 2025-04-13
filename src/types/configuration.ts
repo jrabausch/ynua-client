@@ -18,7 +18,7 @@ export type ClientConfig = {
   basePath?: string;
   auth?: AuthConfig;
   headers?: HeadersInit;
-  fetch?: typeof fetch;
+  fetch?: (request: Request) => Promise<Response>;
 };
 
 export type InitConfig = {
