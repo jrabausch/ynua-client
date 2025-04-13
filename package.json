@@ -1,0 +1,35 @@
+{
+  "name": "@ynua/client",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "LICENSE",
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "lint": "eslint",
+    "check": "tsc --noEmit",
+    "test": "jasmine --config=./jasmine.json",
+    "build": "tsup"
+  },
+  "keywords": [],
+  "author": "Johannes Rabausch",
+  "license": "MIT",
+  "packageManager": "pnpm@10.8.0",
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.12.0",
+    "@types/jasmine": "^5.1.7",
+    "eslint": "^9.24.0",
+    "jasmine": "^5.6.0",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
