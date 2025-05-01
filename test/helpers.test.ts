@@ -32,11 +32,11 @@ describe('appendParams', () => {
       undefined,
     });
 
-    expect(params.getAll('array')).toEqual(['1', '2', '1']);
+    expect(params.getAll('array')).toEqual(['1', '2', 'true']);
     expect(params.get('string')).toBe('string');
     expect(params.get('number')).toBe('100');
-    expect(params.get('true')).toBe('1');
-    expect(params.get('false')).toBe('0');
+    expect(params.get('true')).toBe('true');
+    expect(params.get('false')).toBe('false');
     expect(params.get('null')).toBe('');
     expect(params.get('undefined')).toBe(null);
   });

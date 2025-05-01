@@ -12,25 +12,37 @@ export const combineHeaders = (...headers: Headers[]): Headers => {
   return new Headers(combined);
 };
 
-const paramValue = (value: unknown): string => {
-  return value === true ? '1' : value === false ? '0' : String(value ?? '');
-};
-
+/**
+ * Create `URLSearchParams` from object
+ */
 export const createSearchParams = (
-  entries: Record<string, unknown | unknown[]>,
+  entries: Record<string, string | number | boolean | undefined | null | (string | number | boolean)[]>,
+  join: 'array' | 'multi' | string = 'multi',
 ): URLSearchParams => {
   const params: string[][] = Object.entries(entries)
     .filter(entry => entry[1] !== undefined)
     .flatMap(([key, val]) => {
-      return Array.isArray(val) ? val.map(v => ([key, paramValue(v)])) : [[key, paramValue(val)]];
+      if (Array.isArray(val)) {
+        if (join === 'array' || join === 'multi') {
+          return val.map(v => ([join === 'array' ? `${key}[]` : key, String(v)]));
+        }
+        return [[key, val.join(join)]];
+      }
+      return [[key, String(val ?? '')]];
     });
   return new URLSearchParams(params);
 };
 
+/**
+ * Returns the parsed JSON response
+ */
 export const getResponseData = async <T>(response: Response): Promise<T> => {
   return await response.json() as T;
 };
 
+/**
+ * Throws an error if response is not OK
+ */
 export const assertValidResponse = (response: Response): void => {
   if (!response.ok) {
     throw new ResponseError(response);
