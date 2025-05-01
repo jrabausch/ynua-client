@@ -37,31 +37,30 @@ export class Client {
     throw new Error(`unsupported auth type ${type}`);
   }
 
-  protected async init(
+  public init(
     method: HttpVerb,
     path: string,
     config?: InitConfig,
-  ): Promise<readonly [Request, Response]> {
+  ): Request {
     const url = new URL(path.replace(/^\/+/, ''), this.urlBase);
     url.search = config?.params?.toString() ?? '';
     const headers = combineHeaders(this.headers, new Headers(config?.headers));
-    const request = new Request(url, {
+    return new Request(url, {
       method,
       headers,
       body: config?.body,
       signal: config?.signal,
     });
-    const response = await this.fetch(request);
-    return [request, response];
   };
 
   public async request(
     method: HttpVerb,
     path: string,
     config?: InitConfig,
-  ): Promise<Response> {
-    const [, response] = await this.init(method, path, config);
-    return response;
+  ): Promise<readonly [Request, Response]> {
+    const request = this.init(method, path, config);
+    const response = await this.fetch(request);
+    return [request, response];
   }
 
   public async get(
@@ -70,11 +69,12 @@ export class Client {
     headers?: HeadersInit | null,
     signal?: AbortSignal,
   ): Promise<Response> {
-    return await this.request('get', path, {
+    const [, response] = await this.request('get', path, {
       params: params ?? undefined,
       headers: headers ?? undefined,
       signal,
     });
+    return response;
   }
 
   public async post(
@@ -84,12 +84,13 @@ export class Client {
     headers?: HeadersInit | null,
     signal?: AbortSignal,
   ): Promise<Response> {
-    return await this.request('post', path, {
+    const [, response] = await this.request('post', path, {
       body: body ?? undefined,
       params: params ?? undefined,
       headers: headers ?? undefined,
       signal,
     });
+    return response;
   }
 
   public async put(
@@ -99,12 +100,13 @@ export class Client {
     headers?: HeadersInit | null,
     signal?: AbortSignal,
   ): Promise<Response> {
-    return await this.request('put', path, {
+    const [, response] = await this.request('put', path, {
       body: body ?? undefined,
       params: params ?? undefined,
       headers: headers ?? undefined,
       signal,
     });
+    return response;
   }
 
   public async patch(
@@ -114,12 +116,13 @@ export class Client {
     headers?: HeadersInit | null,
     signal?: AbortSignal,
   ): Promise<Response> {
-    return await this.request('patch', path, {
+    const [, response] = await this.request('patch', path, {
       body: body ?? undefined,
       params: params ?? undefined,
       headers: headers ?? undefined,
       signal,
     });
+    return response;
   }
 
   public async delete(
@@ -128,11 +131,12 @@ export class Client {
     headers?: HeadersInit | null,
     signal?: AbortSignal,
   ): Promise<Response> {
-    return await this.request('delete', path, {
+    const [, response] = await this.request('delete', path, {
       params: params ?? undefined,
       headers: headers ?? undefined,
       signal,
     });
+    return response;
   }
 
   public async head(
@@ -141,10 +145,11 @@ export class Client {
     headers?: HeadersInit | null,
     signal?: AbortSignal,
   ): Promise<Response> {
-    return await this.request('head', path, {
+    const [, response] = await this.request('head', path, {
       params: params ?? undefined,
       headers: headers ?? undefined,
       signal,
     });
+    return response;
   }
 };
