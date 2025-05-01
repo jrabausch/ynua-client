@@ -1,3 +1,5 @@
+import { ResponseError } from './response-error';
+
 /**
  * Headers with the same key get overwritten
  */
@@ -29,8 +31,8 @@ export const getResponseData = async <T>(response: Response): Promise<T> => {
   return await response.json() as T;
 };
 
-export const assetValidResponse = (response: Response): void => {
-  if (response.status < 300) {
-    throw new Error('not valid');
+export const assertValidResponse = (response: Response): void => {
+  if (!response.ok) {
+    throw new ResponseError(response);
   }
 };
