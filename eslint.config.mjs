@@ -10,6 +10,7 @@ export default antfu({
   stylistic: {
     semi: true,
   },
+  ignores: ['*.md'],
   rules: {
     'antfu/top-level-function': ['off'],
     'jsonc/sort-keys': ['off'],
