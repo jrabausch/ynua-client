@@ -12,7 +12,6 @@ describe('combineHeaders', () => {
       'X-Custom': 'custom',
     });
     const headers = combineHeaders(h1, h2, h3);
-    // @ts-expect-error no types
     expect(Array.from(headers.entries())).toEqual([
       ['content-type', 'application/xml'],
       ['x-custom', 'custom'],

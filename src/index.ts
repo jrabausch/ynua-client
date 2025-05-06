@@ -3,7 +3,7 @@ export {
   assertValidResponse,
   combineHeaders,
   createSearchParams,
-  getResponseData,
+  getResponseJson,
 } from './helpers';
 export { ResponseError } from './response-error';
 export type { AuthConfig, ClientConfig, InitConfig } from './types/configuration';

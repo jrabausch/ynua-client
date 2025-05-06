@@ -5,7 +5,6 @@ import { ResponseError } from './response-error';
  */
 export const combineHeaders = (...headers: Headers[]): Headers => {
   const enumerated: [string, string][] = headers.flatMap((obj) => {
-    // @ts-expect-error no types
     return Array.from(obj.entries()) as [string, string][];
   });
   const combined = Object.fromEntries(enumerated);
@@ -19,9 +18,9 @@ export const createSearchParams = (
   entries: Record<string, string | number | boolean | undefined | null | (string | number | boolean)[]>,
   join: 'array' | 'multi' | string = 'multi',
 ): URLSearchParams => {
-  const params: string[][] = Object.entries(entries)
+  const params = Object.entries(entries)
     .filter(entry => entry[1] !== undefined)
-    .flatMap(([key, val]) => {
+    .flatMap(([key, val]): [string, string][] => {
       if (Array.isArray(val)) {
         if (join === 'array' || join === 'multi') {
           return val.map(v => ([join === 'array' ? `${key}[]` : key, String(v)]));
@@ -30,13 +29,14 @@ export const createSearchParams = (
       }
       return [[key, String(val ?? '')]];
     });
+
   return new URLSearchParams(params);
 };
 
 /**
  * Returns the parsed JSON response
  */
-export const getResponseData = async <T>(response: Response): Promise<T> => {
+export const getResponseJson = async <T>(response: Response): Promise<T> => {
   return await response.json() as T;
 };
 

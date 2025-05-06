@@ -1,14 +1,21 @@
+import { getResponseJson } from '../src';
 import { Client } from '../src/client';
+
+type ResponseData = {
+  method: string;
+  url: string;
+  headers: Record<string, string>;
+  body: string;
+};
 
 const mockedFetch = async (request: Request): Promise<Response> => {
   const body = await request.text();
   return new Response(JSON.stringify({
     method: request.method,
     url: request.url,
-    // @ts-expect-error no types
     headers: Object.fromEntries(Array.from(request.headers.entries())),
     body,
-  }), {
+  } satisfies ResponseData), {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -45,7 +52,7 @@ describe('client', () => {
     const response = await client.post('test', 'body-text', null, {
       'Content-Type': 'text/plain',
     });
-    const data = await response.json();
+    const data = await getResponseJson<ResponseData>(response);
     expect(data.method).toBe('POST');
     expect(data.url).toBe('http://localhost/api/test');
     expect(data.headers).toEqual({
