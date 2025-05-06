@@ -1,6 +1,6 @@
-import { combineHeaders, createSearchParams } from '../src/helpers';
+import { mergeHeaders, searchParams } from '../src/helpers';
 
-describe('combineHeaders', () => {
+describe('mergeHeaders', () => {
   it('should combine headers', () => {
     const h1 = new Headers({
       'Content-Type': 'application/json',
@@ -11,7 +11,7 @@ describe('combineHeaders', () => {
     const h3 = new Headers({
       'X-Custom': 'custom',
     });
-    const headers = combineHeaders(h1, h2, h3);
+    const headers = mergeHeaders(h1, h2, h3);
     expect(Array.from(headers.entries())).toEqual([
       ['content-type', 'application/xml'],
       ['x-custom', 'custom'],
@@ -21,7 +21,7 @@ describe('combineHeaders', () => {
 
 describe('appendParams', () => {
   it('should append params', () => {
-    const params = createSearchParams({
+    const params = searchParams({
       array: ['1', 2, true],
       string: 'string',
       number: 100,

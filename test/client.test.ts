@@ -1,4 +1,4 @@
-import { getResponseJson } from '../src';
+import { json } from '../src';
 import { Client } from '../src/client';
 
 type ResponseData = {
@@ -49,10 +49,13 @@ describe('client', () => {
       basePath: '/api',
       fetch: mockedFetch,
     });
-    const response = await client.post('test', 'body-text', null, {
-      'Content-Type': 'text/plain',
+    const response = await client.post('test', {
+      body: 'body-text',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
     });
-    const data = await getResponseJson<ResponseData>(response);
+    const data = await json<ResponseData>(response);
     expect(data.method).toBe('POST');
     expect(data.url).toBe('http://localhost/api/test');
     expect(data.headers).toEqual({

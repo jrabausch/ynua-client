@@ -21,7 +21,7 @@ export type ClientConfig = {
   fetch?: (request: Request) => Promise<Response>;
 };
 
-export type InitConfig = {
+export type RequestConfig = {
   params?: URLSearchParams;
   body?: BodyInit;
   headers?: HeadersInit;

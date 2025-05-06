@@ -1,10 +1,10 @@
 export { Client } from './client';
 export {
-  assertValidResponse,
-  combineHeaders,
-  createSearchParams,
-  getResponseJson,
+  json,
+  mergeHeaders,
+  searchParams,
+  validate,
 } from './helpers';
-export { ResponseError } from './response-error';
-export type { AuthConfig, ClientConfig, InitConfig } from './types/configuration';
+export { HttpError } from './http-error';
+export type { AuthConfig, ClientConfig, RequestConfig } from './types/configuration';
 export type { HttpVerb } from './types/http';

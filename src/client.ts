@@ -1,6 +1,6 @@
-import type { AuthConfig, ClientConfig, InitConfig } from './types/configuration';
+import type { AuthConfig, ClientConfig, RequestConfig } from './types/configuration';
 import type { HttpVerb } from './types/http';
-import { combineHeaders } from './helpers';
+import { mergeHeaders, validate } from './helpers';
 
 export class Client {
   protected readonly urlBase: URL;
@@ -40,11 +40,11 @@ export class Client {
   public init(
     method: HttpVerb,
     path: string,
-    config?: InitConfig,
+    config?: RequestConfig,
   ): Request {
     const url = new URL(path.replace(/^\/+/, ''), this.urlBase);
     url.search = config?.params?.toString() ?? '';
-    const headers = combineHeaders(this.headers, new Headers(config?.headers));
+    const headers = mergeHeaders(this.headers, new Headers(config?.headers));
     return new Request(url, {
       method,
       headers,
@@ -56,7 +56,7 @@ export class Client {
   public async request(
     method: HttpVerb,
     path: string,
-    config?: InitConfig,
+    config?: RequestConfig,
   ): Promise<readonly [Request, Response]> {
     const request = this.init(method, path, config);
     const response = await this.fetch(request);
@@ -65,91 +65,49 @@ export class Client {
 
   public async get(
     path: string,
-    params?: URLSearchParams | null,
-    headers?: HeadersInit | null,
-    signal?: AbortSignal,
+    config?: Omit<RequestConfig, 'body'>,
   ): Promise<Response> {
-    const [, response] = await this.request('get', path, {
-      params: params ?? undefined,
-      headers: headers ?? undefined,
-      signal,
-    });
-    return response;
+    const [request, response] = await this.request('get', path, config);
+    return validate(request, response);
   }
 
   public async post(
     path: string,
-    body?: BodyInit | null,
-    params?: URLSearchParams | null,
-    headers?: HeadersInit | null,
-    signal?: AbortSignal,
+    config?: RequestConfig,
   ): Promise<Response> {
-    const [, response] = await this.request('post', path, {
-      body: body ?? undefined,
-      params: params ?? undefined,
-      headers: headers ?? undefined,
-      signal,
-    });
-    return response;
+    const [request, response] = await this.request('post', path, config);
+    return validate(request, response);
   }
 
   public async put(
     path: string,
-    body?: BodyInit | null,
-    params?: URLSearchParams | null,
-    headers?: HeadersInit | null,
-    signal?: AbortSignal,
+    config?: RequestConfig,
   ): Promise<Response> {
-    const [, response] = await this.request('put', path, {
-      body: body ?? undefined,
-      params: params ?? undefined,
-      headers: headers ?? undefined,
-      signal,
-    });
-    return response;
+    const [request, response] = await this.request('put', path, config);
+    return validate(request, response);
   }
 
   public async patch(
     path: string,
-    body?: BodyInit | null,
-    params?: URLSearchParams | null,
-    headers?: HeadersInit | null,
-    signal?: AbortSignal,
+    config?: RequestConfig,
   ): Promise<Response> {
-    const [, response] = await this.request('patch', path, {
-      body: body ?? undefined,
-      params: params ?? undefined,
-      headers: headers ?? undefined,
-      signal,
-    });
-    return response;
+    const [request, response] = await this.request('patch', path, config);
+    return validate(request, response);
   }
 
   public async delete(
     path: string,
-    params?: URLSearchParams | null,
-    headers?: HeadersInit | null,
-    signal?: AbortSignal,
+    config?: Omit<RequestConfig, 'body'>,
   ): Promise<Response> {
-    const [, response] = await this.request('delete', path, {
-      params: params ?? undefined,
-      headers: headers ?? undefined,
-      signal,
-    });
-    return response;
+    const [request, response] = await this.request('delete', path, config);
+    return validate(request, response);
   }
 
   public async head(
     path: string,
-    params?: URLSearchParams | null,
-    headers?: HeadersInit | null,
-    signal?: AbortSignal,
+    config?: Omit<RequestConfig, 'body'>,
   ): Promise<Response> {
-    const [, response] = await this.request('head', path, {
-      params: params ?? undefined,
-      headers: headers ?? undefined,
-      signal,
-    });
-    return response;
+    const [request, response] = await this.request('head', path, config);
+    return validate(request, response);
   }
 };

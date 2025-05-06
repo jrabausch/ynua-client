@@ -1,11 +1,11 @@
-import { ResponseError } from './response-error';
+import { HttpError } from './http-error';
 
 /**
  * Headers with the same key get overwritten
  */
-export const combineHeaders = (...headers: Headers[]): Headers => {
+export const mergeHeaders = (...headers: Headers[]): Headers => {
   const enumerated: [string, string][] = headers.flatMap((obj) => {
-    return Array.from(obj.entries()) as [string, string][];
+    return Array.from(obj.entries());
   });
   const combined = Object.fromEntries(enumerated);
   return new Headers(combined);
@@ -14,7 +14,7 @@ export const combineHeaders = (...headers: Headers[]): Headers => {
 /**
  * Create `URLSearchParams` from object
  */
-export const createSearchParams = (
+export const searchParams = (
   entries: Record<string, string | number | boolean | undefined | null | (string | number | boolean)[]>,
   join: 'array' | 'multi' | string = 'multi',
 ): URLSearchParams => {
@@ -36,15 +36,16 @@ export const createSearchParams = (
 /**
  * Returns the parsed JSON response
  */
-export const getResponseJson = async <T>(response: Response): Promise<T> => {
+export const json = async <T>(response: Response): Promise<T> => {
   return await response.json() as T;
 };
 
 /**
  * Throws an error if response is not OK
  */
-export const assertValidResponse = (response: Response): void => {
+export const validate = (request: Request, response: Response): Response => {
   if (!response.ok) {
-    throw new ResponseError(response);
+    throw new HttpError(request, response);
   }
+  return response;
 };
