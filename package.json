@@ -1,6 +1,6 @@
 {
   "name": "@ynua/client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple wrapper for the Fetch standard API.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,7 +16,13 @@
     "test": "jasmine --config=./jasmine.json",
     "build": "tsup"
   },
-  "keywords": ["client", "fetch", "http", "api", "rest"],
+  "keywords": [
+    "client",
+    "fetch",
+    "http",
+    "api",
+    "rest"
+  ],
   "author": "Johannes Rabausch",
   "license": "MIT",
   "repository": {
