@@ -1,7 +1,7 @@
 {
   "name": "@ynua/client",
   "version": "0.1.0",
-  "description": "",
+  "description": "Simple wrapper for the Fetch standard API.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -16,9 +16,14 @@
     "test": "jasmine --config=./jasmine.json",
     "build": "tsup"
   },
-  "keywords": [],
+  "keywords": ["client", "fetch", "http", "api", "rest"],
   "author": "Johannes Rabausch",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jrabausch/ynua-client.git"
+  },
+  "sideEffects": false,
   "packageManager": "pnpm@10.8.0",
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.0",
@@ -30,6 +35,6 @@
     "typescript": "^5.8.3"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   }
 }
